@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from 'axios';
 import Search from "./Search";
 
@@ -34,13 +35,15 @@ export default function All_Movies(props) {
     return(
         <div>
             <Search searchButton={handleSearch} />
+            <br />
             {
                 allMovies && allMovies.map(movie=>{
                     return(
                         <div>
                             <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
                             <h3>{movie.title}</h3>
-                            <p>{movie.vote_average}</p>
+                            <p>Ranking: {movie.vote_average}</p>
+                            <Link to={`/movie/${movie.id}`}>See Details</Link>
                             <hr />
                         </div>
                     )

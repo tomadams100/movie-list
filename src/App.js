@@ -8,6 +8,7 @@ import All_Movies from './components/All_Movies';
 import My_Movies from './components/My_Movies';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Routes, Route, Outlet } from "react-router-dom";
+import Movie_Details from './components/Movie_Details';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
      <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="/movie/:movieId" element={<Movie_Details />} />
           <Route path="/all-movies" element={<All_Movies />} />
           <Route path="/my-movies" element={<My_Movies />} />
           <Route path="/about" element={<About />} />
