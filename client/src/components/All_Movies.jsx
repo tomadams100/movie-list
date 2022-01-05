@@ -16,7 +16,6 @@ export default function All_Movies(props) {
         })
         .catch(console.log)
     },[])
-    console.log("allMovies:",allMovies)
     function handleSearch(event) {
         setSearch(event.target.value)
     }

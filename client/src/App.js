@@ -8,22 +8,40 @@ import All_Movies from './components/All_Movies';
 import My_Movies from './components/My_Movies';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Routes, Route, Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Movie_Details from './components/Movie_Details';
+import Signup from './components/Signup';
+import Login from './components/Login';
+import axios from 'axios';
+import PrivateRoute from './components/PrivateRoute';
+import AnonRoute from './components/AnonRoute';
 
-function App() {
+function App(props) {
+  const [data, setData] = useState(null)
+  useEffect(()=>{
+    axios.get(`/api`)
+    .then(res => {
+      setData(res.data.message)
+    })
+    console.log("data: ", data)
+},[])
+console.log("data: ",data)
   return (
     <div className="App">
-    <Router>
+    <Layout />
      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+        <Route element={<AnonRoute />}>
+          <Route path="/" element={<Home />} />
           <Route path="/movie/:movieId" element={<Movie_Details />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/all-movies" element={<All_Movies />} />
           <Route path="/my-movies" element={<My_Movies />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
           <Route path="/about" element={<About />} />
         </Route>
       </Routes>
-      </Router>
     </div>
   );
 }
