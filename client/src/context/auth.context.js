@@ -11,7 +11,6 @@ function AuthProviderWrapper(props) {
   let navigate = useNavigate()
 
   const verifyToken = () => {
-    console.log("i'm in verify token")
     setIsLoading(true)
     const localJWTToken = localStorage.getItem("authToken");
     if (localJWTToken) {
@@ -24,22 +23,23 @@ function AuthProviderWrapper(props) {
           setUser(userJWT); // this is essential to create the context for auth
           setIsLoggedIn(true);
           setIsLoading(false);
-          console.log("isLoading auth context: ",isLoading)
+          console.log("isLoggedIn: ",isLoggedIn,"user: ",user)
         })
         .catch((error) => {
           setUser(null);
           setIsLoggedIn(false);
           setIsLoading(false);
+          console.log("isLoggedIn: ",isLoggedIn,"user: ",user)
         });
     } else {
       // The token is not in the localStorage
       setIsLoading(false);
     }
+    console.log("the user is: ", user)
   };
 
   const logInUser = (JWTToken) => {
     console.log("i'm in logInUser")
-    console.log("isLoggedIn: ",isLoggedIn,"user: ",user)
     localStorage.setItem("authToken", JWTToken);
     verifyToken(); // I do not pass it her because verify will read for localStorage.
     // This way I save subsequent requests to the back

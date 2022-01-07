@@ -1,12 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 import Search from "./Search";
+import { AuthContext } from "../context/auth.context";
+
 
 export default function All_Movies(props) {
     const [allMovies, setAllMovies] = useState(null)
     const [search, setSearch] = useState("")
     const [popularMovies, setPopularMovies] = useState(null)
+    const [loggedInUser, setLoggedInUser] = useState(null)
+    const [loaded, setLoaded] = useState(false)
+    const [showButton, setShowButton] = useState(true)
+    const {user} = useContext(AuthContext)
+
+    useEffect(()=>{
+        axios.post(`/loggedInUser`,user)
+        .then(res => {
+            setLoggedInUser(res.data.user)
+            setLoaded(true)
+        })
+        .catch(console.log)
+    },[])
+    loggedInUser && console.log("who's logged in? ", loggedInUser.username, " is!")
     useEffect(()=>{
         axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}`)
         .then(response=>{
@@ -31,7 +47,29 @@ export default function All_Movies(props) {
             setAllMovies(popularMovies)
         }
     },[search])
-    return(
+
+    function handleAdd(event, movieId) {
+        event.preventDefault();
+        axios
+        .post(`/addMovie`, {movieId, user})
+        .then((response)=>{
+            console.log("response from DB=>", response);
+            setShowButton(!showButton)
+        })
+        .catch(console.log)
+    }
+    function handleRemove(event, movieId) {
+        event.preventDefault();
+        axios
+        .post(`/removeMovie`, {movieId, user})
+        .then((response)=>{
+            console.log("response from DB=>", response);
+            setShowButton(!showButton)
+        })
+        .catch(console.log)
+    }
+
+    if (loggedInUser) return(
         <div>
             <Search searchButton={handleSearch} />
             <br />
@@ -43,6 +81,27 @@ export default function All_Movies(props) {
                             <h3>{movie.title}</h3>
                             <p>Ranking: {movie.vote_average}</p>
                             <Link to={`/movie/${movie.id}`}>See Details</Link>
+                            <br />
+                            {!loggedInUser.watchList.includes(movie.id)&&
+                            <>
+                            <form onSubmit={(event)=>handleAdd(event,movie.id)} style={{display: showButton ? 'unset' : 'none'}}>
+                                <button type="submit">Add to Watch List</button>
+                            </form>
+                            <form onSubmit={(event)=>handleRemove(event,movie.id)} style={{display: showButton ? 'none' : 'unset'}}>
+                                <button type="submit">Remove from Watch List</button>
+                            </form>
+                            </>
+                            }
+                            {loggedInUser.watchList.includes(movie.id)&&
+                            <>
+                            <form onSubmit={(event)=>handleAdd(event,movie.id)} style={{display: showButton ? 'none' : 'unset'}}>
+                                <button type="submit">Add to Watch List</button>
+                            </form>
+                            <form onSubmit={(event)=>handleRemove(event,movie.id)} style={{display: showButton ? 'unset' : 'none'}}>
+                                <button type="submit">Remove from Watch List</button>
+                            </form>
+                            </>
+                            }
                             <hr />
                         </div>
                     )
@@ -50,4 +109,5 @@ export default function All_Movies(props) {
             }
         </div>
     )
+    else return <h1>Loading!!!!!!!!!!!!!!!!!!</h1>
 }

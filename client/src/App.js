@@ -17,15 +17,7 @@ import PrivateRoute from './components/PrivateRoute';
 import AnonRoute from './components/AnonRoute';
 
 function App(props) {
-  const [data, setData] = useState(null)
-  useEffect(()=>{
-    axios.get(`/api`)
-    .then(res => {
-      setData(res.data.message)
-    })
-    console.log("data: ", data)
-},[])
-console.log("data: ",data)
+const [data, setData] = useState(null)
   return (
     <div className="App">
     <Layout />

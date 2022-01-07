@@ -15,7 +15,8 @@ const usersSchema = new Schema({
     password: {
         type:String,
         required:true
-    }
+    },
+    watchList: [Number]
 })
 
 module.exports = model("User", usersSchema)

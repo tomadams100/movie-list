@@ -20,10 +20,6 @@ app.set("trust proxy", 1);
   );
 app.use(express.json());
 
-app.get("/api", (req, res) => {
-    res.json({ message: "Hello from server!" });
-});
-
 app.post("/loggedInUser", (req, res) => {
   const {_id} = req.body
   console.log("Find this user: ", _id)
@@ -109,11 +105,27 @@ app.post("/login",(req,res)=>{
     .catch((err) => res.status(500).json({ message: "Internal Server Error" }));
 })
 
+app.post("/addMovie", (req,res) => {
+  const {movieId, user} = req.body
+  console.log("movieId: ", movieId, "user: ", user)
+  User.findByIdAndUpdate(user._id,{$addToSet:{"watchList":movieId}})
+  .then((response)=>{
+    res.json({message: "done adding movie to watchList"})
+  })
+})
+
+app.post("/removeMovie", (req,res) => {
+  const {movieId, user} = req.body
+  console.log("movieId: ", movieId, "user: ", user)
+  User.findByIdAndUpdate(user._id,{$pull:{"watchList":movieId}})
+  .then((response)=>{
+    res.json({message: "done removing movie from watchList"})
+  })
+})
+
 app.get("/verify", isAuthenticated, (req, res, next) => {
   // If JWT token is valid the payload gets decoded by the
   // isAuthenticated middleware and made available on `req.payload`
-  console.log("i'm in verify")
-
   // Send back the object with user data
   // previously set as the token payload
   res.status(200).json(req.payload);

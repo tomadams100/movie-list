@@ -8,7 +8,6 @@ export default function AnonRoute(props) {
     const { isLoggedIn, isLoading } = useContext(AuthContext);
 
     // If the authentication is still loading ⏳
-    console.log("isLoading anon route: ",isLoading)
     if (isLoading) return <h1 style={{color: "red"}}>Loading ...</h1>;
 
     return <Outlet />

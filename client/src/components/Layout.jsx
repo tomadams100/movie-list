@@ -3,7 +3,7 @@ import { Link, Outlet } from "react-router-dom";
 import { AuthContext } from "../context/auth.context";
 
 export default function Layout(props) {
-    const {logOutUser} = useContext(AuthContext)
+    const {logOutUser, isLoggedIn} = useContext(AuthContext)
     return(
         <div>
         <h1>Movie List</h1>
@@ -11,15 +11,21 @@ export default function Layout(props) {
                 <li>
                     <Link to="/">Home</Link>
                 </li>
+                {!isLoggedIn &&
                 <li>
                     <Link to="/signup">Sign Up</Link>
                 </li>
+                }
+                {!isLoggedIn &&
                 <li>
                     <Link to="/login">Log In</Link>
                 </li>
+                }
+                {isLoggedIn &&
                 <li>
                     <button onClick={logOutUser}>Log Out</button>
                 </li>
+                }
                 <li>
                     <Link to="/all-movies">All Movies</Link>
                 </li>
