@@ -16,7 +16,7 @@ const usersSchema = new Schema({
         type:String,
         required:true
     },
-    watchList: [Number]
+    watchList: [Object]
 })
 
 module.exports = model("User", usersSchema)

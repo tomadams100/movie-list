@@ -106,18 +106,18 @@ app.post("/login",(req,res)=>{
 })
 
 app.post("/addMovie", (req,res) => {
-  const {movieId, user} = req.body
-  console.log("movieId: ", movieId, "user: ", user)
-  User.findByIdAndUpdate(user._id,{$addToSet:{"watchList":movieId}})
+  const {movie, user} = req.body
+  console.log("movie: ", movie, "user: ", user)
+  User.findByIdAndUpdate(user._id,{$addToSet:{"watchList":movie}})
   .then((response)=>{
     res.json({message: "done adding movie to watchList"})
   })
 })
 
 app.post("/removeMovie", (req,res) => {
-  const {movieId, user} = req.body
-  console.log("movieId: ", movieId, "user: ", user)
-  User.findByIdAndUpdate(user._id,{$pull:{"watchList":movieId}})
+  const {movie, user} = req.body
+  console.log("movieId: ", movie, "user: ", user)
+  User.findByIdAndUpdate(user._id,{$pull:{"watchList":movie}})
   .then((response)=>{
     res.json({message: "done removing movie from watchList"})
   })

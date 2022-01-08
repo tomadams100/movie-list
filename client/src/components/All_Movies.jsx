@@ -21,7 +21,7 @@ export default function All_Movies(props) {
             setLoaded(true)
         })
         .catch(console.log)
-    },[])
+    },[showButton])
     loggedInUser && console.log("who's logged in? ", loggedInUser.username, " is!")
     useEffect(()=>{
         axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}`)
@@ -31,7 +31,7 @@ export default function All_Movies(props) {
             setPopularMovies(response.data.results)
         })
         .catch(console.log)
-    },[])
+    },[showButton])
     function handleSearch(event) {
         setSearch(event.target.value)
     }
@@ -46,22 +46,22 @@ export default function All_Movies(props) {
         } else {
             setAllMovies(popularMovies)
         }
-    },[search])
+    },[search,showButton])
 
-    function handleAdd(event, movieId) {
+    function handleAdd(event, movie) {
         event.preventDefault();
         axios
-        .post(`/addMovie`, {movieId, user})
+        .post(`/addMovie`, {movie, user})
         .then((response)=>{
             console.log("response from DB=>", response);
             setShowButton(!showButton)
         })
         .catch(console.log)
     }
-    function handleRemove(event, movieId) {
+    function handleRemove(event, movie) {
         event.preventDefault();
         axios
-        .post(`/removeMovie`, {movieId, user})
+        .post(`/removeMovie`, {movie, user})
         .then((response)=>{
             console.log("response from DB=>", response);
             setShowButton(!showButton)
@@ -76,28 +76,22 @@ export default function All_Movies(props) {
             {
                 allMovies && allMovies.map(movie=>{
                     return(
-                        <div>
+                        <div key={movie.id}>
                             <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
                             <h3>{movie.title}</h3>
                             <p>Ranking: {movie.vote_average}</p>
                             <Link to={`/movie/${movie.id}`}>See Details</Link>
                             <br />
-                            {!loggedInUser.watchList.includes(movie.id)&&
+                            {!loggedInUser.watchList.some(e=>e.id===movie.id)&&
                             <>
-                            <form onSubmit={(event)=>handleAdd(event,movie.id)} style={{display: showButton ? 'unset' : 'none'}}>
+                            <form onSubmit={(event)=>handleAdd(event,movie)}>
                                 <button type="submit">Add to Watch List</button>
-                            </form>
-                            <form onSubmit={(event)=>handleRemove(event,movie.id)} style={{display: showButton ? 'none' : 'unset'}}>
-                                <button type="submit">Remove from Watch List</button>
                             </form>
                             </>
                             }
-                            {loggedInUser.watchList.includes(movie.id)&&
+                            {loggedInUser.watchList.some(e=>e.id===movie.id)&&
                             <>
-                            <form onSubmit={(event)=>handleAdd(event,movie.id)} style={{display: showButton ? 'none' : 'unset'}}>
-                                <button type="submit">Add to Watch List</button>
-                            </form>
-                            <form onSubmit={(event)=>handleRemove(event,movie.id)} style={{display: showButton ? 'unset' : 'none'}}>
+                            <form onSubmit={(event)=>handleRemove(event,movie)}>
                                 <button type="submit">Remove from Watch List</button>
                             </form>
                             </>
