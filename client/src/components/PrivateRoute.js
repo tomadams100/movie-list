@@ -3,7 +3,6 @@ import { AuthContext } from "./../context/auth.context";
 import { Redirect, Route, useNavigate, Outlet } from "react-router-dom";
 
 export default function PrivateRoute(props) {
-    console.log("private route props: ", props)
     const {to,exact, component: Component, ...restProps} = props
     const {isLoggedIn, isLoading} = useContext(AuthContext)
     let navigate = useNavigate()
