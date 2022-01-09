@@ -4,7 +4,7 @@ const User = require("./models/Users.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
-const PORT = process.env.REACT_APP_PORT || 3001;
+const PORT = process.env.PORT || 3001;
 const { isAuthenticated } = require("./middleware/jwt.middleware.js");
 require('dotenv').config()
 require("./db")
