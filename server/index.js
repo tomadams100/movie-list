@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path")
 const User = require("./models/Users.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
