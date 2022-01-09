@@ -11,6 +11,7 @@ export default function RemoveMovieButton(props) {
         axios
         .post(`/removeMovie`, {movie, user})
         .then((response)=>{
+            console.log("response: ", response)
             toggleShowButton()
         })
         .catch(console.log)

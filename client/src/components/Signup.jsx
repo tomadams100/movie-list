@@ -1,13 +1,16 @@
 import axios from "axios";
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import { useNavigate } from "react-router";
 
 export default function Signup(props) {
+    let navigate = useNavigate()
     const [formState, setFormState] = useState({
         username:"",
         email:"",
         password:""
     })
+
     function handleInput(event) {
         setFormState({...formState, [event.target.name]: event.target.value})
     }
@@ -17,15 +20,16 @@ export default function Signup(props) {
         .post(`/signup`, formState)
         .then((response) => {
             console.log("response from DB=>", response);
+            navigate('/login');
         })
         .catch((err) => {
             console.log("err: ",err)
         });
     }
     return(
-        <div>
-            <h1>Sign Up page</h1>
-            <Form onSubmit={handleSubmit} className="w-50 mx-auto">
+        <div className="pt-5">
+            <h1>Sign Up</h1>
+            <Form onSubmit={handleSubmit} className="w-25 mx-auto">
                 <Form.Group className="mb-3" controlId="formBasicUsername">
                     <Form.Label>Username</Form.Label>
                     <Form.Control type="text" placeholder="Enter username" name="username" value={formState.username} onChange={handleInput} />

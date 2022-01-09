@@ -108,9 +108,9 @@ app.post("/addMovie", (req,res) => {
 
 app.post("/removeMovie", (req,res) => {
   const {movie, user} = req.body
-  User.findByIdAndUpdate(user._id,{$pull:{"watchList":movie}})
+  User.findByIdAndUpdate(user._id,{$pull:{"watchList":{"id":movie.id}}})
   .then((response)=>{
-    res.json({message: "done removing movie from watchList"})
+    res.json({message: `response from db: ${response}`})
   })
 })
 

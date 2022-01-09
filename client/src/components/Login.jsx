@@ -5,7 +5,7 @@ import { AuthContext } from "../context/auth.context";
 import { Form, Button } from "react-bootstrap";
 
 export default function Login(props) {
-    let navigate = useNavigate();
+    let navigate = useNavigate()
     const { logInUser } = useContext(AuthContext);
     const [formState, setFormState] = useState({
         email:"",
@@ -16,15 +16,18 @@ export default function Login(props) {
     }
     async function handleSubmit(event) {
         event.preventDefault();
-        const axiosCall = await axios.post(`/login`, formState)
-            const JWTToken = await axiosCall.data.authToken;
-            const logsin = await logInUser(JWTToken);
-            const navs = await navigate(`/my-movies`)
+        axios.post(`/login`, formState)
+        .then((response)=>{
+            const JWTToken = response.data.authToken;
+            logInUser(JWTToken);
+            navigate(`/my-movies`);
+        })
+        .catch(console.log)
     }
     return(
-        <div>
-            <h1>Login page</h1>
-            <Form onSubmit={handleSubmit} className="w-50 mx-auto">
+        <div className="pt-5">
+            <h1>Login</h1>
+            <Form onSubmit={handleSubmit} className="w-25 mx-auto">
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="Enter email" name="email" value={formState.email} onChange={handleInput} />

@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import { Button, Col, Row } from "react-bootstrap";
 import Loading from "./Loading";
+import AllMoviesButton from "./buttons/AllMoviesButton";
 
 export default function Movie_Details(props) {
     const {movieId} = useParams()
@@ -30,7 +31,7 @@ export default function Movie_Details(props) {
                 return <li>{genre.name}</li>
             })}</ul>
             <p>{movie.overview}</p>
-            <Button as={Link} to={`/all-movies`}>Back to All Movies</Button>
+            <AllMoviesButton />
             </Col>
         </Row>
         </div>

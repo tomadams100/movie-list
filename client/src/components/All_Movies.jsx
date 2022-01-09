@@ -2,19 +2,18 @@ import { useContext, useEffect, useState } from "react";
 import axios from 'axios';
 import Search from "./Search";
 import { AuthContext } from "../context/auth.context";
-import { Button, Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import Loading from "./Loading";
 import DetailsButton from "./buttons/DetailsButton";
 import AddMovieButton from "./buttons/AddMovieButton";
-import RemoveMovieButton from "./buttons/RemoveMovieButton";
-
+import RemoveMovieButton from "./buttons/RemoveMovieButton"
+import DisabledAddMovieButton from "./buttons/DisabledAddMovieButton";
 
 export default function All_Movies(props) {
     const [allMovies, setAllMovies] = useState(null)
     const [search, setSearch] = useState("")
     const [popularMovies, setPopularMovies] = useState(null)
     const [loggedInUser, setLoggedInUser] = useState(null)
-    const [loaded, setLoaded] = useState(false)
     const [showButton, setShowButton] = useState(true)
     const {user} = useContext(AuthContext)
 
@@ -22,10 +21,9 @@ export default function All_Movies(props) {
         axios.post(`/loggedInUser`,user)
         .then(res => {
             setLoggedInUser(res.data.user)
-            setLoaded(true)
         })
         .catch(console.log)
-    },[showButton])
+    },[showButton,user])
     useEffect(()=>{
         axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}`)
         .then(response=>{
@@ -33,7 +31,7 @@ export default function All_Movies(props) {
             setPopularMovies(response.data.results)
         })
         .catch(console.log)
-    },[showButton])
+    },[showButton,user])
     function handleSearch(event) {
         setSearch(event.target.value)
     }
@@ -51,7 +49,7 @@ export default function All_Movies(props) {
 
     function toggleShowButton() {
         setShowButton(!showButton)
-    }
+      }
 
     if (allMovies !== null) return(
         <div className="pt-3">
@@ -63,6 +61,7 @@ export default function All_Movies(props) {
                 allMovies && allMovies.map(movie=>{
                     return(
                         <Col key={movie.id} className="pb-3">
+                        <div className="">
                             <img className="rounded movieImage pb-2" style={{"width" : "12rem"}} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
                             <h3 className="movie-title">{movie.title}</h3>
                             <p>Ranking: {movie.vote_average}</p>
@@ -70,11 +69,15 @@ export default function All_Movies(props) {
                             <DetailsButton {...movie} />
                             {loggedInUser&&(
                                 <>
-                                {!loggedInUser.watchList.some(e=>e.id===movie.id)&&<AddMovieButton {...movie} {...user} toggleShowButton={toggleShowButton} />}
+                                {!loggedInUser.watchList.some(e=>e.id===movie.id)&&<AddMovieButton {...movie} {...user} toggleShowButton={toggleShowButton} /> }
                                 {loggedInUser.watchList.some(e=>e.id===movie.id)&&<RemoveMovieButton {...movie} {...user} toggleShowButton={toggleShowButton} />}
                                 </>
                             )}
+                            {!loggedInUser&&(
+                                <DisabledAddMovieButton />
+                            )}
                             </div>
+                        </div>
                         </Col>
                     )
                 })

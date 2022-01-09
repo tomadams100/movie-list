@@ -6,6 +6,8 @@ import { Container, Row, Col, Button, Modal } from "react-bootstrap";
 import Loading from "./Loading";
 import { Link } from "react-router-dom";
 import Movie_Details_Modal from "./Movie_Details_Modal";
+import RemoveMovieButton from "./buttons/RemoveMovieButton";
+import AllMoviesButton from "./buttons/AllMoviesButton";
 
 export default function My_Movies(props) {
   const { user } = useContext(AuthContext);
@@ -40,6 +42,10 @@ function handleRemove(event, movie) {
     .catch(console.log)
 }
 
+function toggleShowButton() {
+  setShowButton(!showButton)
+}
+
   if (loaded)
     return (
       <div>
@@ -51,7 +57,6 @@ function handleRemove(event, movie) {
         <Container>
           <Row>
             {loggedInUser.watchList.map((movie) => {
-              console.log("movie: ", movie)
               return (
                 <Col key={movie.id}>
                   <div>
@@ -65,9 +70,7 @@ function handleRemove(event, movie) {
                     <p>Ranking: {movie.vote_average}</p>
                   </div>
                   <Movie_Details_Modal {...movie} />
-                  <form className="p-1" onSubmit={(event)=>handleRemove(event,movie)}>
-                      <Button variant="danger" type="submit">Remove from Watch List</Button>
-                  </form>
+                  <RemoveMovieButton {...movie} {...user} toggleShowButton={toggleShowButton} />
                 </Col>
               );
             })}
@@ -79,7 +82,7 @@ function handleRemove(event, movie) {
           <div className="pt-3">
             <h3>You haven't added any movies to your list yet!</h3>
             <p>Go to My Movies to start...</p>
-            <Button as={Link} to={"/all-movies"}>All Movies</Button>
+            <AllMoviesButton />
           </div>
         }
       </div>
