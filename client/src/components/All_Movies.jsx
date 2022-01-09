@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import axios from 'axios';
 import Search from "./Search";
 import { AuthContext } from "../context/auth.context";
+import { Button, Container, Row, Col } from "react-bootstrap";
+import Loading from "./Loading";
 
 
 export default function All_Movies(props) {
@@ -22,11 +24,9 @@ export default function All_Movies(props) {
         })
         .catch(console.log)
     },[showButton])
-    loggedInUser && console.log("who's logged in? ", loggedInUser.username, " is!")
     useEffect(()=>{
         axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${process.env.REACT_APP_API_KEY}`)
         .then(response=>{
-            console.log("all movies response: ",response)
             setAllMovies(response.data.results)
             setPopularMovies(response.data.results)
         })
@@ -39,7 +39,6 @@ export default function All_Movies(props) {
         if(search!=="") {
             axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&query=${search}`)
             .then(response=>{
-                console.log("search response: ",response)
                 setAllMovies(response.data.results)
             })
             .catch(console.log)
@@ -53,7 +52,6 @@ export default function All_Movies(props) {
         axios
         .post(`/addMovie`, {movie, user})
         .then((response)=>{
-            console.log("response from DB=>", response);
             setShowButton(!showButton)
         })
         .catch(console.log)
@@ -63,45 +61,50 @@ export default function All_Movies(props) {
         axios
         .post(`/removeMovie`, {movie, user})
         .then((response)=>{
-            console.log("response from DB=>", response);
             setShowButton(!showButton)
         })
         .catch(console.log)
     }
 
-    if (loggedInUser) return(
-        <div>
+    if (allMovies !== null) return(
+        <div className="pt-3">
             <Search searchButton={handleSearch} />
             <br />
+            <Container>
+                <Row>
             {
                 allMovies && allMovies.map(movie=>{
                     return(
-                        <div key={movie.id}>
-                            <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
-                            <h3>{movie.title}</h3>
+                        <Col key={movie.id} className="pb-3">
+                        <div className="">
+                            <img className="rounded movieImage pb-2" style={{"width" : "12rem"}} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
+                            <h3 className="movie-title">{movie.title}</h3>
                             <p>Ranking: {movie.vote_average}</p>
-                            <Link to={`/movie/${movie.id}`}>See Details</Link>
-                            <br />
-                            {!loggedInUser.watchList.some(e=>e.id===movie.id)&&
-                            <>
-                            <form onSubmit={(event)=>handleAdd(event,movie)}>
-                                <button type="submit">Add to Watch List</button>
-                            </form>
-                            </>
-                            }
-                            {loggedInUser.watchList.some(e=>e.id===movie.id)&&
-                            <>
-                            <form onSubmit={(event)=>handleRemove(event,movie)}>
-                                <button type="submit">Remove from Watch List</button>
-                            </form>
-                            </>
-                            }
-                            <hr />
+                            <div className="d-flex justify-content-center">
+                            <Button className="m-1" variant="secondary" as={Link} to={`/movie/${movie.id}`} style={{"width":"5rem"}}>Details</Button>
+                            {loggedInUser&&(
+                                <>
+                                {!loggedInUser.watchList.some(e=>e.id===movie.id)&&
+                                <>
+                                <Button className="m-1" onClick={(event)=>handleAdd(event,movie)} variant="light" style={{"width":"5rem"}}>Add</Button>
+                                </>
+                                }
+                                {loggedInUser.watchList.some(e=>e.id===movie.id)&&
+                                <>
+                                <Button className="m-1" variant="danger" type="submit"  onClick={(event)=>handleRemove(event,movie)} style={{"width":"5rem"}}>Remove</Button>
+                                </>
+                                }
+                                </>
+                            )}
+                            </div>
                         </div>
+                        </Col>
                     )
                 })
             }
+            </Row>
+            </Container>
         </div>
     )
-    else return <h1>Loading!!!!!!!!!!!!!!!!!!</h1>
+    else return <Loading />
 }

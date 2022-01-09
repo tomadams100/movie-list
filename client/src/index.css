@@ -5,9 +5,38 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #141414 !important;
+  color: #E0E0E0 !important;
 }
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+.modal-body {
+  background-color: #E0E0E0 !important;
+  color: #141414 !important;
+}
+.modal-header {
+  background-color: #E0E0E0 !important;
+}
+.movieImage {
+  transition: all 0.2s ease-in-out !important;
+}
+.movieImage:hover {
+  transform: scale(1.035) !important;
+}
+.btn-danger, .btn-danger:hover, .btn-danger:active, .btn-danger:visited {
+  background-color: #9A0000 !important;
+  border: white !important;
+}
+.btn-secondary, .btn-secondary:hover, .btn-secondary:active, .btn-secondary:visited {
+  background-color: #3a3e42 !important;
+  border: white !important;
+}
+.btn-light, .btn-light:hover, .btn-light:active, .btn-light:visited {
+  background-color: #E0E0E0 !important;
+  border: white !important;
+}
+.search {
+  background-color: #141414 !important;
+  border: 2px solid #E0E0E0 !important;
+}
+.movie-title {
+  font-size: 1em;
 }

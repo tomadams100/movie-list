@@ -22,10 +22,8 @@ app.use(express.json());
 
 app.post("/loggedInUser", (req, res) => {
   const {_id} = req.body
-  console.log("Find this user: ", _id)
   User.findById(_id)
   .then((foundUser)=>{
-    console.log("foundUser: ", foundUser)
     res.json({ user: foundUser});
   })
   .catch(console.log)
@@ -33,8 +31,6 @@ app.post("/loggedInUser", (req, res) => {
 
 app.post("/signup", (req, res) => {
   const { email, password, username } = req.body;
-  console.log("email: ",email,"password: ",password,"username: ",username)
-
   if (!email || !password || !username) {
     res.status(400).json({ message: "Provide email, password and name" });
     return;
@@ -51,7 +47,6 @@ app.post("/signup", (req, res) => {
       return User.create({ email, password: hashedPassword, username });
     })
     .then((createdUser) => {
-      console.log("createdUser: ", createdUser)
       const { email, username, _id } = createdUser;
       const user = { email, username, _id };
       res.status(201).json({ user: user });
@@ -63,7 +58,6 @@ app.post("/signup", (req, res) => {
 });
 
 app.post("/login",(req,res)=>{
-  console.log("You're in the login post backend")
   const { email, password } = req.body;
 
   if (email === "" || !password) {
@@ -86,7 +80,6 @@ app.post("/login",(req,res)=>{
 
       if (passwordCorrect) {
         const { _id, email, username } = foundUser;
-        console.log("Password is correct, you're logged in now")
         // Create an object that will be set as the token payload
         const payload = { _id };
         // Create and sign the token
@@ -107,7 +100,6 @@ app.post("/login",(req,res)=>{
 
 app.post("/addMovie", (req,res) => {
   const {movie, user} = req.body
-  console.log("movie: ", movie, "user: ", user)
   User.findByIdAndUpdate(user._id,{$addToSet:{"watchList":movie}})
   .then((response)=>{
     res.json({message: "done adding movie to watchList"})
@@ -116,7 +108,6 @@ app.post("/addMovie", (req,res) => {
 
 app.post("/removeMovie", (req,res) => {
   const {movie, user} = req.body
-  console.log("movieId: ", movie, "user: ", user)
   User.findByIdAndUpdate(user._id,{$pull:{"watchList":movie}})
   .then((response)=>{
     res.json({message: "done removing movie from watchList"})

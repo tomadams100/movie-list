@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import Home from './components/Home'
 import Layout from './components/Layout';
@@ -28,10 +29,10 @@ const [data, setData] = useState(null)
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/all-movies" element={<All_Movies />} />
-          <Route path="/my-movies" element={<My_Movies />} />
+          <Route path="/about" element={<About />} />
         </Route>
         <Route element={<PrivateRoute />}>
-          <Route path="/about" element={<About />} />
+          <Route path="/my-movies" element={<My_Movies />} />
         </Route>
       </Routes>
     </div>
