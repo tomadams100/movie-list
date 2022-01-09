@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import axios from 'axios';
 import Search from "./Search";
 import { AuthContext } from "../context/auth.context";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import Loading from "./Loading";
+import DetailsButton from "./buttons/DetailsButton";
+import AddMovieButton from "./buttons/AddMovieButton";
+import RemoveMovieButton from "./buttons/RemoveMovieButton";
 
 
 export default function All_Movies(props) {
@@ -47,23 +49,8 @@ export default function All_Movies(props) {
         }
     },[search,showButton])
 
-    function handleAdd(event, movie) {
-        event.preventDefault();
-        axios
-        .post(`/addMovie`, {movie, user})
-        .then((response)=>{
-            setShowButton(!showButton)
-        })
-        .catch(console.log)
-    }
-    function handleRemove(event, movie) {
-        event.preventDefault();
-        axios
-        .post(`/removeMovie`, {movie, user})
-        .then((response)=>{
-            setShowButton(!showButton)
-        })
-        .catch(console.log)
+    function toggleShowButton() {
+        setShowButton(!showButton)
     }
 
     if (allMovies !== null) return(
@@ -76,28 +63,18 @@ export default function All_Movies(props) {
                 allMovies && allMovies.map(movie=>{
                     return(
                         <Col key={movie.id} className="pb-3">
-                        <div className="">
                             <img className="rounded movieImage pb-2" style={{"width" : "12rem"}} src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
                             <h3 className="movie-title">{movie.title}</h3>
                             <p>Ranking: {movie.vote_average}</p>
                             <div className="d-flex justify-content-center">
-                            <Button className="m-1" variant="secondary" as={Link} to={`/movie/${movie.id}`} style={{"width":"5rem"}}>Details</Button>
+                            <DetailsButton {...movie} />
                             {loggedInUser&&(
                                 <>
-                                {!loggedInUser.watchList.some(e=>e.id===movie.id)&&
-                                <>
-                                <Button className="m-1" onClick={(event)=>handleAdd(event,movie)} variant="light" style={{"width":"5rem"}}>Add</Button>
-                                </>
-                                }
-                                {loggedInUser.watchList.some(e=>e.id===movie.id)&&
-                                <>
-                                <Button className="m-1" variant="danger" type="submit"  onClick={(event)=>handleRemove(event,movie)} style={{"width":"5rem"}}>Remove</Button>
-                                </>
-                                }
+                                {!loggedInUser.watchList.some(e=>e.id===movie.id)&&<AddMovieButton {...movie} {...user} toggleShowButton={toggleShowButton} />}
+                                {loggedInUser.watchList.some(e=>e.id===movie.id)&&<RemoveMovieButton {...movie} {...user} toggleShowButton={toggleShowButton} />}
                                 </>
                             )}
                             </div>
-                        </div>
                         </Col>
                     )
                 })
