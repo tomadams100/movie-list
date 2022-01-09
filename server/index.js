@@ -19,6 +19,7 @@ app.set("trust proxy", 1);
     })
   );
 app.use(express.json());
+app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 app.post("/loggedInUser", (req, res) => {
   const {_id} = req.body
@@ -120,6 +121,10 @@ app.get("/verify", isAuthenticated, (req, res, next) => {
   // Send back the object with user data
   // previously set as the token payload
   res.status(200).json(req.payload);
+});
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
 app.listen(PORT, () => {
