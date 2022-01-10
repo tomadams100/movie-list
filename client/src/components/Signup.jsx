@@ -27,7 +27,7 @@ export default function Signup(props) {
         });
     }
     return(
-        <div className="pt-5">
+        <div className="center">
             <h1>Sign Up</h1>
             {/* <Container>
             <Col className="col-xs-4 col-sm-2"> */}

@@ -25,7 +25,7 @@ export default function Login(props) {
         .catch(console.log)
     }
     return(
-        <div className="pt-5">
+        <div className="center">
             <h1>Login</h1>
             <Form onSubmit={handleSubmit} className="mx-auto loginForm">
                 <Form.Group className="mb-3" controlId="formBasicEmail">

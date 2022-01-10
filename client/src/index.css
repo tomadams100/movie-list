@@ -49,4 +49,11 @@ body {
     width: 75%;
   }
 }
-
+.center {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  height:100vh !important;
+  margin-top: -5rem !important;
+}

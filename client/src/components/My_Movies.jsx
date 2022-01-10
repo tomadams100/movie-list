@@ -79,7 +79,7 @@ function toggleShowButton() {
         </>
         )}
         {loggedInUser.watchList.length === 0 &&
-          <div className="pt-3">
+          <div className="pt-5">
             <h3>You haven't added any movies to your list yet!</h3>
             <p>Go to My Movies to start...</p>
             <AllMoviesButton />

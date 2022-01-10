@@ -14,13 +14,12 @@ export default function PrivateRoute(props) {
 
     if (isLoggedIn) return <Outlet />
     else return (
-        <div className="p-5">
+        <div className="center">
             <h3>Please sign up or login to start creating your movie list!</h3>
             <br />
-            <Button as={Link} to={"/signup"}>Sign Up</Button>
+            <Button variant="light" as={Link} to={"/signup"}>Sign Up</Button>
             <br />
-            <br />
-            <Button as={Link} to={"/login"}>Login</Button>
+            <Button variant="light" as={Link} to={"/login"}>Login</Button>
         </div>
     )
 
