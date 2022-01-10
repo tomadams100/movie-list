@@ -38,7 +38,7 @@ export default function Login(props) {
                     <Form.Control type="password" placeholder="Password" name="password" value={formState.password} onChange={handleInput} />
                 </Form.Group>
 
-                <Button variant="primary" type="submit">
+                <Button variant="light" type="submit">
                     Log In
                 </Button>
             </Form>
