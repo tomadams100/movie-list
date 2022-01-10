@@ -27,7 +27,7 @@ export default function Login(props) {
     return(
         <div className="pt-5">
             <h1>Login</h1>
-            <Form onSubmit={handleSubmit} className="w-25 mx-auto">
+            <Form onSubmit={handleSubmit} className="mx-auto loginForm">
                 <Form.Group className="mb-3" controlId="formBasicEmail">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="Enter email" name="email" value={formState.email} onChange={handleInput} />

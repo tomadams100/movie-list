@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Container, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router";
 
 export default function Signup(props) {
@@ -29,7 +29,9 @@ export default function Signup(props) {
     return(
         <div className="pt-5">
             <h1>Sign Up</h1>
-            <Form onSubmit={handleSubmit} className="w-25 mx-auto">
+            {/* <Container>
+            <Col className="col-xs-4 col-sm-2"> */}
+            <Form onSubmit={handleSubmit} className="mx-auto signupForm">
                 <Form.Group className="mb-3" controlId="formBasicUsername">
                     <Form.Label>Username</Form.Label>
                     <Form.Control type="text" placeholder="Enter username" name="username" value={formState.username} onChange={handleInput} />
@@ -52,6 +54,8 @@ export default function Signup(props) {
                     Submit
                 </Button>
             </Form>
+         {/*    </Col>
+            </Container> */}
         </div>
     )
 }
